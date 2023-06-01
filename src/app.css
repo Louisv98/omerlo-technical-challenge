@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.app-header {
+    background-color: green;
+    height: 60px;
+}
+
+.app-footer {
+    background-color: green;
+    height: 60px;
+}
