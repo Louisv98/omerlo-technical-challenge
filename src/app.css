@@ -11,3 +11,13 @@
     background-color: green;
     height: 60px;
 }
+
+/* Home Page */
+
+/* .article-image-container {
+    width: 30%;
+} */
+
+.article-image {
+    max-width: 100%;
+}
