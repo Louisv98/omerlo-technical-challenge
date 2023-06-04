@@ -2,25 +2,15 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import axios, { type AxiosResponse } from 'axios'
 import { SECRET_API_KEY, NYT_BASE_URL } from '$env/static/private';
-
-interface Article {
-    headline: string;
-    summary: string;
-    pubDate: string;
-    image?: string;
-}
+import type { Article } from '../interfaces/article';
 
 /**
  * Fetch the latests news articles from NYT.
  * @returns A list of the latest news articles from NYT.
  */
 async function fetchLatestNews(): Promise<AxiosResponse> {
-    console.log('BASE URL:', NYT_BASE_URL)
     const today = new Date();
-    const curDate = today.getDate();
-    const curMonth = today.getUTCMonth();
-    const curYear = today.getFullYear();
-    const dateString = `${curYear}-${curMonth}-${curDate}`;
+    const dateString = today.toISOString().split('T')[0];
     return await axios.get(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=pub_date:(${dateString})&api-key=${SECRET_API_KEY}`);
 }
 
@@ -31,8 +21,9 @@ async function fetchLatestNews(): Promise<AxiosResponse> {
  */
 function createArticleFromResponse(nytResponse: any): Article {
     const article: Article = {
+        id: nytResponse.uri.split('/')[3],
         headline: nytResponse.headline.main,
-        summary: nytResponse.lead_paragraph,
+        summary: nytResponse.snippet,
         pubDate: nytResponse.pub_date.split('T')[0]
     }
 
