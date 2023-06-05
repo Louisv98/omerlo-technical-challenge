@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import axios, { type AxiosResponse } from 'axios'
 import { SECRET_API_KEY, NYT_BASE_URL } from '$env/static/private';
 import type { Article } from '../interfaces/article';
 
@@ -8,10 +7,13 @@ import type { Article } from '../interfaces/article';
  * Fetch the latests news articles from NYT.
  * @returns A list of the latest news articles from NYT.
  */
-async function fetchLatestNews(): Promise<AxiosResponse> {
+async function fetchLatestNews(fetch: any): Promise<Response> {
     const today = new Date();
-    const dateString = today.toISOString().split('T')[0];
-    return await axios.get(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=pub_date:(${dateString})&api-key=${SECRET_API_KEY}`);
+    const day = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const dateString = `${year}-${month}-${day}`;
+    return fetch(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=pub_date:(${dateString})&api-key=${SECRET_API_KEY}`);
 }
 
 /**
@@ -34,16 +36,24 @@ function createArticleFromResponse(nytResponse: any): Article {
     return article;
 }
 
-export const load = (async () => {
-    const latestNewsResponse = await fetchLatestNews();
-    if (latestNewsResponse.data.response) {
-        const articles: Article[] = [];
-        for (const responseArticle of latestNewsResponse.data.response.docs) {
-            articles.push(createArticleFromResponse(responseArticle));
+export const load = (async ({ fetch }) => {
+    try {
+        const latestNewsResponse = await fetchLatestNews(fetch);
+        if (latestNewsResponse.status === 200) {
+            const articles: Article[] = [];
+            const latestNewsJson = await latestNewsResponse.json()
+            for (const responseArticle of latestNewsJson.response.docs) {
+                articles.push(createArticleFromResponse(responseArticle));
+            }
+            return {
+                articles: articles
+            };
         }
+    } catch (error) {
+        console.error(`Error in load function for /: ${error}`);
         return {
-            articles: articles
+            articles: []
         };
     }
-    throw error(404, 'Not found');
+    //throw error(500, 'Error while loading news');
 }) satisfies PageServerLoad;

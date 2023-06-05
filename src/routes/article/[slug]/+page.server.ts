@@ -1,11 +1,10 @@
 import { error } from '@sveltejs/kit';
-import axios, { type AxiosResponse } from 'axios';
 import type { PageServerLoad } from './$types';
 import { NYT_BASE_URL, SECRET_API_KEY } from '$env/static/private';
 import type { ArticleDetails } from '../../../interfaces/article-details';
 
-async function fetchArticleDetails(articleUri: string): Promise<AxiosResponse> {
-    return await axios.get(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=uri:("nyt://article/${articleUri}")&api-key=${SECRET_API_KEY}`);
+async function fetchArticleDetails(fetch: any, articleUri: string): Promise<Response> {
+    return fetch(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=uri:("nyt://article/${articleUri}")&api-key=${SECRET_API_KEY}`);
 }
 
 function createArticleDetailsFromResponse(nytResponse: any): ArticleDetails {
@@ -26,13 +25,14 @@ function createArticleDetailsFromResponse(nytResponse: any): ArticleDetails {
     return article;
 }
 
-export const load = (async ({ params }) => {
+export const load = (async ({ fetch, params }) => {
     const articleUri = params.slug;
-    if (articleUri) {
-        const articleSearchResult = await fetchArticleDetails(articleUri);
-        if (articleSearchResult.data.status == 'OK') {
+    if (articleUri.length > 0) {
+        const articleSearchResult = await fetchArticleDetails(fetch, articleUri);
+        const articleSearchJson = await articleSearchResult.json();
+        if (articleSearchResult.status === 200) {
             return {
-                articleDetails: createArticleDetailsFromResponse(articleSearchResult.data.response.docs[0])
+                articleDetails: createArticleDetailsFromResponse(articleSearchJson.response.docs[0])
             };
         }
     }
