@@ -30,7 +30,7 @@ function createArticleFromResponse(nytResponse: any): Article {
     }
 
     if (nytResponse.multimedia.length > 0) {
-        article.image = `https://www.nytimes.com/${nytResponse.multimedia[0].url}`;
+        article.image = `https://www.nytimes.com/${nytResponse.multimedia[5].url}`;
     }
 
     return article;
