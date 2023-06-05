@@ -3,7 +3,7 @@
 </script>
 
 <header class="app-header">
-
+    <a href="/">Back</a>
 </header>
 
 <slot />

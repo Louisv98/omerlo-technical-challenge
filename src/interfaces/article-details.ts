@@ -3,5 +3,5 @@ export interface ArticleDetails {
     content: string;
     author: string;
     pubDate: string;
-    images: string[];
+    image?: string;
 }

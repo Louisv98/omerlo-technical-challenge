@@ -5,11 +5,18 @@
 .app-header {
     background-color: green;
     height: 60px;
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 
 .app-footer {
     background-color: green;
     height: 60px;
+}
+
+.page-container {
+    margin-top: 4em;
 }
 
 /* Home Page */
@@ -24,4 +31,10 @@
 
 .article-container {
     cursor: pointer;
+}
+
+/* Article Details Page */
+
+#article-details-image {
+    width: 50%;
 }

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import { SECRET_API_KEY, NYT_BASE_URL } from '$env/static/private';
+import type { PageLoad } from './$types';
+import { PUBLIC_API_KEY, PUBLIC_NYT_BASE_URL } from '$env/static/public';
 import type { Article } from '../interfaces/article';
 
 /**
@@ -13,7 +13,7 @@ async function fetchLatestNews(fetch: any): Promise<Response> {
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
     const dateString = `${year}-${month}-${day}`;
-    return fetch(`${NYT_BASE_URL}/search/v2/articlesearch.json?fq=pub_date:(${dateString})&api-key=${SECRET_API_KEY}`);
+    return fetch(`${PUBLIC_NYT_BASE_URL}/search/v2/articlesearch.json?fq=pub_date:(${dateString})&api-key=${PUBLIC_API_KEY}`);
 }
 
 /**
@@ -37,6 +37,9 @@ function createArticleFromResponse(nytResponse: any): Article {
 }
 
 export const load = (async ({ fetch }) => {
+    const loadResponse: { articles: Article[] } = {
+        articles: []
+    }
     try {
         const latestNewsResponse = await fetchLatestNews(fetch);
         if (latestNewsResponse.status === 200) {
@@ -45,15 +48,11 @@ export const load = (async ({ fetch }) => {
             for (const responseArticle of latestNewsJson.response.docs) {
                 articles.push(createArticleFromResponse(responseArticle));
             }
-            return {
-                articles: articles
-            };
+            loadResponse.articles = articles;
         }
     } catch (error) {
         console.error(`Error in load function for /: ${error}`);
-        return {
-            articles: []
-        };
     }
+    return loadResponse;
     //throw error(500, 'Error while loading news');
-}) satisfies PageServerLoad;
+}) satisfies PageLoad;
