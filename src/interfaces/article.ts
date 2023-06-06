@@ -2,6 +2,9 @@ export interface Article {
     id: string;
     headline: string;
     summary: string;
-    pubDate: string;
     image?: string;
+    content: string;
+    author: string;
+    pubDate: string;
+    detailsImage?: string;
 }

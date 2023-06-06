@@ -25,11 +25,14 @@
             id: nytResponse.uri.split('/')[3],
             headline: nytResponse.headline.main,
             summary: nytResponse.snippet,
-            pubDate: nytResponse.pub_date.split('T')[0]
+            pubDate: nytResponse.pub_date.split('T')[0],
+            content: nytResponse.lead_paragraph,
+            author: nytResponse.byline.original,
         }
 
         if (nytResponse.multimedia.length > 0) {
-            article.image = `https://www.nytimes.com/${nytResponse.multimedia[0].url}`;
+            article.image = `https://www.nytimes.com/${nytResponse.multimedia[5].url}`;
+            article.detailsImage = `https://www.nytimes.com/${nytResponse.multimedia[0].url}`
         }
 
         return article;
