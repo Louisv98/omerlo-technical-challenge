@@ -64,16 +64,23 @@
     }
 </script>
 
-<header class="app-header p-4">
-    <a class="mr-4" href="/">Back</a>
-    <input class="rounded mr-4" placeholder="Search article..." bind:value={searchInputValue} />
-    <button type="button" class="app-button rounded mr-1" on:click={searchArticles}>Search</button>
-    <button type="button" class="app-button rounded" on:click={resetArticles}>Reset</button>
+<header class="app-header p-4 rounded flex" class:default-header-height="{$page.url.pathname.includes('article')}">
+    {#if $page.url.pathname.includes('article')}
+        <a class="mr-4" href="/">Back</a>
+    {:else}
+        <div>
+            <input class="rounded mr-4 border-solid border-2 border-black" placeholder="Search article..." bind:value={searchInputValue} />
+        </div>
+        <div id="search-buttons-container" class="row">
+            <button type="button" class="app-button rounded mr-1" on:click={searchArticles}>Search</button>
+            <button type="button" class="app-button rounded" on:click={resetArticles}>Reset</button>
+        </div>
+    {/if}
 </header>
 
 <slot />
 
-<footer class="app-footer relative block">
+<footer class="app-footer relative block rounded">
     <p class="p-2">Louis Villeneuve, 2023</p>
 </footer>
 

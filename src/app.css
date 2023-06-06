@@ -3,16 +3,15 @@
 @tailwind utilities;
 
 .app-header {
-    background-color: green;
-    height: 60px;
     position: fixed;
     top: 0;
     width: 100%;
 }
 
-.app-footer {
-    background-color: green;
+.app-footer, .app-header {
+    background-color: #ebd834;
     height: 60px;
+    border: 2px solid black;
 }
 
 .page-container {
@@ -21,10 +20,12 @@
 
 .app-button {
     background-color: white;
+    width: 70px;
+    border: 2px solid black;
 }
 
 body {
-    background-color: lightgray;
+    background-color: #eaebd1;
 }
 
 .article-container {
@@ -32,22 +33,17 @@ body {
     max-width: 1000px;
 }
 
-/* Home Page */
+@media screen and (max-width: 480px) {
+    .app-header {
+        height: 90px;
+        flex-direction: column;
+    }
 
-/* .article-image-container {
-    width: 30%;
-} */
+    #search-buttons-container {
+        margin-top: 5px;
+    }
 
-.article-image {
-    max-width: 100%;
-}
-
-.article-container {
-    cursor: pointer;
-}
-
-/* Article Details Page */
-
-#article-details-image {
-    width: 50%;
+    .default-header-height {
+        height: 60px;
+    }
 }

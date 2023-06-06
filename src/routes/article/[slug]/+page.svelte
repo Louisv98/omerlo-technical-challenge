@@ -16,3 +16,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    #article-details-image {
+        width: 50%;
+    }
+</style>
