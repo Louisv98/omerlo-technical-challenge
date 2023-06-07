@@ -71,7 +71,7 @@
      * Fetches articles from the input value from the search bar.
      */
     async function searchArticles(): Promise<void> {
-        const articleSearchResult = await fetch(`${PUBLIC_NYT_BASE_URL}/search/v2/articlesearch.json?f=${searchInputValue}&api-key=${PUBLIC_API_KEY}`);
+        const articleSearchResult = await fetch(`${PUBLIC_NYT_BASE_URL}/search/v2/articlesearch.json?q=${searchInputValue}&api-key=${PUBLIC_API_KEY}`);
         const articleSearchJson = await articleSearchResult.json();
         updateArticles(articleSearchJson);
     }
