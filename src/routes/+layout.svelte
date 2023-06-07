@@ -38,6 +38,10 @@
         return article;
     }
 
+    /**
+     * Updates the articles list from the JSON response of the NYT API.
+     * @param articleSearchJson The JSON response from the NYT API.
+     */
     function updateArticles(articleSearchJson: any): void {
         $articles = [];
         const tempArticles: Article[] = [];
@@ -49,6 +53,9 @@
         }
     }
 
+    /**
+     * Resets the articles list with the latest articles from NYT.
+     */
     async function resetArticles(): Promise<void> {
         const today = new Date();
         const day = today.getDate();
@@ -60,6 +67,9 @@
         updateArticles(articleSearchJson);
     }
 
+    /**
+     * Fetches articles from the input value from the search bar.
+     */
     async function searchArticles(): Promise<void> {
         const articleSearchResult = await fetch(`${PUBLIC_NYT_BASE_URL}/search/v2/articlesearch.json?f=${searchInputValue}&api-key=${PUBLIC_API_KEY}`);
         const articleSearchJson = await articleSearchResult.json();
